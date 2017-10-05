@@ -6,6 +6,9 @@ MainWindow::MainWindow(QWidget *parent) :
     ui_(new Ui::MainWindow)
 {
     ui_->setupUi(this);
+
+    setCorner(Qt::BottomRightCorner, Qt::RightDockWidgetArea);
+    setCorner(Qt::BottomLeftCorner, Qt::LeftDockWidgetArea);
 }
 
 MainWindow::~MainWindow()
