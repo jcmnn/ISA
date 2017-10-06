@@ -6,6 +6,7 @@
 
 class ISA : public QApplication
 {
+    Q_OBJECT
 public:
     ISA(int &argc, char *argv[]);
 

@@ -7,9 +7,19 @@ set(I_SOURCE
 
         isa.h
         isa.cpp
+        logmodel.h
+        logmodel.cpp
+        log.h
+        log.cpp
 
         ui/mainwindow.h
         ui/mainwindow.cpp
+
+        ui/widgets/logview.h
+        ui/widgets/logview.cpp
+
+        files/pefile.h
+        files/pefile.cpp
 )
 
 set(I_UIS
@@ -17,7 +27,7 @@ set(I_UIS
     )
 
 set(I_QRCS
-
+    resources/style.qrc
     )
 
 qt5_wrap_ui(I_UI ${I_UIS})
