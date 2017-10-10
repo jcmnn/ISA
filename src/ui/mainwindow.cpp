@@ -36,6 +36,8 @@ void MainWindow::on_actionNew_triggered()
             Log::error(QString("Failed to open file: ") + file.errorString());
         }
 
-        PEFile pefile(&file);
+        PEFilePtr pefile = std::make_shared<PEFile>(&file);
+
+        ui_->peInfo->updateFile(pefile);
     }
 }

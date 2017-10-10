@@ -2,6 +2,8 @@
 #define PEFILE_H
 
 #include <QIODevice>
+#include <QAbstractTableModel>
+#include <memory>
 
 class PEFile
 {
@@ -145,7 +147,7 @@ public:
         SUBSYS_WINDOWS_CE_GUI = 9,
         SUBSYS_EFI_APPLICATION = 10,
         SUBSYS_EFI_BOOT_SERVICE_DRIVER = 11,
-        SUBSYS_EFI_RUNTIME_DRIVE = 12,
+        SUBSYS_EFI_RUNTIME_DRIVER = 12,
         SUBSYS_EFI_ROM = 13,
         SUBSYS_XBOX = 14,
         SUBSYS_WINDOWS_BOOT_APPLICATION = 16,
@@ -207,7 +209,7 @@ public:
         SCHAR_MEM_NOT_CACHED = 0x4000000,
         SCHAR_MEM_NOT_PAGED = 0x8000000,
         SCHAR_MEM_SHARED = 0x10000000,
-        SCHAR_MEM_ExECUTE = 0x20000000,
+        SCHAR_MEM_EXECUTE = 0x20000000,
         SCHAR_MEM_READ = 0x40000000,
         SCHAR_MEM_WRITE = 0x80000000,
     };
@@ -217,6 +219,70 @@ public:
     OptionalHeader optionalHeader_;
     std::vector<DataDirectory> dataDirectories_;
     std::vector<SectionHeader> sectionTable_;
+
+    static const QString machineString(MachineType type);
+    static const QString coffCharString(CoffCharacteristics characteristics);
+    static const QString subsystemString(Subsystem subsystem);
+    static const QString dllCharString(DllCharacteristics characteristics);
+    static const QString sectionCharString(SectionCharacteristics characteristics);
 };
+
+typedef std::shared_ptr<PEFile> PEFilePtr;
+
+
+
+
+
+
+class PEModel : public QAbstractTableModel
+{
+public:
+    PEModel(QObject *parent = Q_NULLPTR);
+    void setFile(PEFilePtr peFile);
+
+protected:
+    PEFilePtr peFile_;
+};
+
+
+class PESectionModel : public PEModel
+{
+public:
+    PESectionModel(QObject *parent = Q_NULLPTR);
+
+    int rowCount(const QModelIndex &parent) const override;
+    int columnCount(const QModelIndex &parent) const override;
+
+    QVariant data(const QModelIndex &index, int role) const override;
+    QVariant headerData(int section, Qt::Orientation orientation, int role) const override;
+};
+
+
+class PECoffModel : public PEModel
+{
+public:
+    PECoffModel(QObject *parent = Q_NULLPTR);
+
+    int rowCount(const QModelIndex &parent) const override;
+    int columnCount(const QModelIndex &parent) const override;
+
+    QVariant data(const QModelIndex &index, int role) const override;
+    QVariant headerData(int section, Qt::Orientation orientation, int role) const override;
+};
+
+
+
+class PEOptionalModel : public PEModel
+{
+public:
+    PEOptionalModel(QObject *parent = Q_NULLPTR);
+
+    int rowCount(const QModelIndex &parent) const override;
+    int columnCount(const QModelIndex &parent) const override;
+
+    QVariant data(const QModelIndex &index, int role) const override;
+    QVariant headerData(int section, Qt::Orientation orientation, int role) const override;
+};
+
 
 #endif // PEFILE_H

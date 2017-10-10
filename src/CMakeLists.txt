@@ -12,11 +12,17 @@ set(I_SOURCE
         log.h
         log.cpp
 
+        section.h
+        section.cpp
+
         ui/mainwindow.h
         ui/mainwindow.cpp
 
         ui/widgets/logview.h
         ui/widgets/logview.cpp
+
+        ui/widgets/peinfowidget.h
+        ui/widgets/peinfowidget.cpp
 
         files/pefile.h
         files/pefile.cpp
@@ -24,6 +30,7 @@ set(I_SOURCE
 
 set(I_UIS
     ui/mainwindow.ui
+    ui/widgets/peinfowidget.ui
     )
 
 set(I_QRCS

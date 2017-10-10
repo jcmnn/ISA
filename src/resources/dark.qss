@@ -88,3 +88,24 @@ QTabWidget::pane {
     padding: 5px;
     margin: 0px;
 }
+
+
+
+
+
+
+
+QTableView {
+    border: 1px solid #474747;
+    background-color: #2d2d2d;
+}
+
+QHeaderView::section {
+    background-color: #444;
+    border: none;
+    border-left: 1px solid #666;
+    border-right: 1px solid #333;
+    padding-top: 3px;
+    padding-left: 4px;
+    min-height: 20px;
+}

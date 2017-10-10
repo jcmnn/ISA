@@ -64,7 +64,7 @@
         <enum>QTabWidget::Rounded</enum>
        </property>
        <property name="currentIndex">
-        <number>0</number>
+        <number>2</number>
        </property>
        <property name="documentMode">
         <bool>false</bool>
@@ -86,6 +86,11 @@
        <widget class="QWidget" name="hex">
         <attribute name="title">
          <string>Hex</string>
+        </attribute>
+       </widget>
+       <widget class="PEInfoWidget" name="peInfo">
+        <attribute name="title">
+         <string>PE Info</string>
         </attribute>
        </widget>
       </widget>
@@ -268,6 +273,12 @@
    <class>LogView</class>
    <extends>QPlainTextEdit</extends>
    <header>widgets/logview.h</header>
+  </customwidget>
+  <customwidget>
+   <class>PEInfoWidget</class>
+   <extends>QWidget</extends>
+   <header>widgets/peinfowidget.h</header>
+   <container>1</container>
   </customwidget>
  </customwidgets>
  <resources/>
