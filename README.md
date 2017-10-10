@@ -14,7 +14,7 @@ Compiling
 * Qt5
 
 ### Compiling on Windows
-The Visual C++ Compiler is the only compiler actively tested on Windows; if another compiler works, it is by coincidence.
+The Visual C++ Compiler is the only compiler actively tested on Windows; however, any compiler supported by Qt should work.
 Compiling under Visual Studio is unuspported.
 
 
