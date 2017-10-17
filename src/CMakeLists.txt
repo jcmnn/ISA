@@ -11,6 +11,8 @@ set(I_SOURCE
         logmodel.cpp
         log.h
         log.cpp
+        sectionhandler.h
+        sectionhandler.cpp
 
         section.h
         section.cpp
@@ -24,8 +26,10 @@ set(I_SOURCE
         ui/widgets/peinfowidget.h
         ui/widgets/peinfowidget.cpp
 
-        files/pefile.h
-        files/pefile.cpp
+        pe/pefile.h
+        pe/pefile.cpp
+        pe/pesection.h
+        pe/pesection.cpp
 )
 
 set(I_UIS

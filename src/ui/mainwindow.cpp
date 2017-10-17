@@ -2,7 +2,7 @@
 #include "ui_mainwindow.h"
 #include "logmodel.h"
 #include "log.h"
-#include "files/pefile.h"
+#include "pe/pefile.h"
 
 #include <QStringListModel>
 
@@ -26,7 +26,7 @@ void MainWindow::on_actionNew_triggered()
 {
     Log::normal("Opening new file");
 
-    QString path = QFileDialog::getOpenFileName(this, tr("Open File"), QString(), tr("Binaries (*.exe *.dll)"));
+    QString path = QFileDialog::getOpenFileName(this, tr("Open File"), QString(), tr("Binaries (*.exe *.dll);;All Files (*)"));
 
     if (!path.isEmpty())
     {
@@ -38,6 +38,9 @@ void MainWindow::on_actionNew_triggered()
 
         PEFilePtr pefile = std::make_shared<PEFile>(&file);
 
-        ui_->peInfo->updateFile(pefile);
+        if (pefile->valid())
+        {
+            ui_->peInfo->updateFile(pefile);
+        }
     }
 }

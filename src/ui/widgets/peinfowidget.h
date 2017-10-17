@@ -2,7 +2,7 @@
 #define PEINFOWIDGET_H
 
 #include <QWidget>
-#include "files/pefile.h"
+#include "pe/pefile.h"
 
 namespace Ui {
 class PEInfoWidget;
