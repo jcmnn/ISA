@@ -8,7 +8,9 @@
 static const uint32_t OPTHEADER_SIZE_BASE_PE32 = 96;
 static const uint32_t OPTHEADER_SIZE_BASE_PE32P = 112;
 
-CoffFile::CoffFile() : valid_(false) {}
+CoffFile::CoffFile() : valid_(false)
+{
+}
 
 bool CoffFile::parse(QIODevice *device)
 {
@@ -22,7 +24,8 @@ bool CoffFile::parse(QIODevice *device)
 
     device->seek(peOffset);
 
-    if (stream.atEnd()) {
+    if (stream.atEnd())
+    {
         Log::error("Invalid PE file: stream ended");
         return false;
     }
@@ -32,25 +35,30 @@ bool CoffFile::parse(QIODevice *device)
         uint32_t peId;
         stream >> peId;
 
-        if (peId != 0x4550) { // PE\0\0
+        if (peId != 0x4550)
+        { // PE\0\0
             Log::error("Invalid PE header ID");
             return false;
         }
     }
 
-    if (!parseCoffHeader(stream)) {
+    if (!parseCoffHeader(stream))
+    {
         return false;
     }
 
     optionalHeaderExists_ = (coffHeader_.sizeOfOptionalHeader != 0);
 
-    if (optionalHeaderExists_) {
-        if (!parseOptionalHeader(stream)) {
+    if (optionalHeaderExists_)
+    {
+        if (!parseOptionalHeader(stream))
+        {
             return false;
         }
     }
 
-    if (!parseSectionTable(stream)) {
+    if (!parseSectionTable(stream))
+    {
         return false;
     }
 
@@ -69,7 +77,8 @@ bool CoffFile::parseCoffHeader(QDataStream &stream)
     stream >> coffHeader_.sizeOfOptionalHeader;
     stream >> coffHeader_.characteristics;
 
-    if (stream.atEnd()) {
+    if (stream.atEnd())
+    {
         Log::error("Invalid PE file: stream ended");
         return false;
     }
@@ -80,24 +89,30 @@ bool CoffFile::parseCoffHeader(QDataStream &stream)
 bool CoffFile::parseOptionalHeader(QDataStream &stream)
 {
     stream >> optionalHeader_.signature;
-    if (stream.atEnd()) {
+    if (stream.atEnd())
+    {
         Log::error("Invalid PE file: stream ended");
         return false;
     }
 
     bool pe32 = false;
 
-    switch (optionalHeader_.signature) {
+    switch (optionalHeader_.signature)
+    {
     case ET_PE32:
-        if (coffHeader_.sizeOfOptionalHeader < OPTHEADER_SIZE_BASE_PE32) {
-            Log::error("Invalid PE file: optional header is too short for PE32");
+        if (coffHeader_.sizeOfOptionalHeader < OPTHEADER_SIZE_BASE_PE32)
+        {
+            Log::error(
+                "Invalid PE file: optional header is too short for PE32");
             return false;
         }
         pe32 = true;
         break;
     case ET_PE32P:
-        if (coffHeader_.sizeOfOptionalHeader < OPTHEADER_SIZE_BASE_PE32P) {
-            Log::error("Invalid PE fil: optional header is too short for PE32+");
+        if (coffHeader_.sizeOfOptionalHeader < OPTHEADER_SIZE_BASE_PE32P)
+        {
+            Log::error(
+                "Invalid PE fil: optional header is too short for PE32+");
             return false;
         }
         break;
@@ -118,17 +133,20 @@ bool CoffFile::parseOptionalHeader(QDataStream &stream)
     stream >> optionalHeader_.baseOfCode;
 
     // A temporary variable for reading 32 bit fields for the pe32 format.
-    // We cannot read directly to the structure because some fields are 64 bit to
-    // accomodate for PE32+
+    // We cannot read directly to the structure because some fields are 64 bit
+    // to accomodate for PE32+
     uint32_t tempPe32;
 
-    if (pe32) {
+    if (pe32)
+    {
         stream >> optionalHeader_.baseOfData;
 
         // Start optional header extension
         stream >> tempPe32;
         optionalHeader_.imageBase = tempPe32;
-    } else {
+    }
+    else
+    {
         stream >> optionalHeader_.imageBase;
     }
 
@@ -146,7 +164,8 @@ bool CoffFile::parseOptionalHeader(QDataStream &stream)
     stream >> optionalHeader_.checkSum;
     stream >> optionalHeader_.subsystem;
     stream >> optionalHeader_.dllCharacteristics;
-    if (pe32) {
+    if (pe32)
+    {
         stream >> tempPe32;
         optionalHeader_.sizeOfStackReserve = tempPe32;
         stream >> tempPe32;
@@ -155,7 +174,9 @@ bool CoffFile::parseOptionalHeader(QDataStream &stream)
         optionalHeader_.sizeOfHeapReserve = tempPe32;
         stream >> tempPe32;
         optionalHeader_.sizeOfHeapCommit = tempPe32;
-    } else {
+    }
+    else
+    {
         stream >> optionalHeader_.sizeOfStackReserve;
         stream >> optionalHeader_.sizeOfStackCommit;
         stream >> optionalHeader_.sizeOfHeapReserve;
@@ -164,26 +185,32 @@ bool CoffFile::parseOptionalHeader(QDataStream &stream)
     stream >> optionalHeader_.loaderFlags;
     stream >> optionalHeader_.numberOfRvaAndSizes;
 
-    if (stream.atEnd()) {
+    if (stream.atEnd())
+    {
         Log::error("Invalid PE file: stream ended");
         return false;
     }
 
     uint16_t sizeLeft;
-    if (pe32) {
+    if (pe32)
+    {
         sizeLeft = coffHeader_.sizeOfOptionalHeader - OPTHEADER_SIZE_BASE_PE32;
-    } else {
+    }
+    else
+    {
         sizeLeft = coffHeader_.sizeOfOptionalHeader - OPTHEADER_SIZE_BASE_PE32P;
     }
 
     uint16_t sizeNeeded = optionalHeader_.numberOfRvaAndSizes * 8; // 2 dwords
-    if (sizeLeft < sizeNeeded) {
-        Log::error(
-            "Invalid PE file: data-directory entries exceed optional header size");
+    if (sizeLeft < sizeNeeded)
+    {
+        Log::error("Invalid PE file: data-directory entries exceed optional "
+                   "header size");
         return false;
     }
 
-    for (uint32_t i = 0; i < optionalHeader_.numberOfRvaAndSizes; ++i) {
+    for (uint32_t i = 0; i < optionalHeader_.numberOfRvaAndSizes; ++i)
+    {
         DataDirectory dataDirectory;
         stream >> dataDirectory.virtualAddress;
         stream >> dataDirectory.size;
@@ -191,14 +218,17 @@ bool CoffFile::parseOptionalHeader(QDataStream &stream)
     }
 
     sizeLeft -= sizeNeeded;
-    if (sizeLeft != 0) {
-        Log::warning(QString("There are %1 excess bytes in the optional header; "
-                             "skipping over them")
-                     .arg(sizeLeft));
+    if (sizeLeft != 0)
+    {
+        Log::warning(
+            QString("There are %1 excess bytes in the optional header; "
+                    "skipping over them")
+                .arg(sizeLeft));
         stream.skipRawData(sizeLeft);
     }
 
-    if (stream.atEnd()) {
+    if (stream.atEnd())
+    {
         Log::error("Invalid PE file: stream ended");
         return false;
     }
@@ -208,10 +238,12 @@ bool CoffFile::parseOptionalHeader(QDataStream &stream)
 
 bool CoffFile::parseSectionTable(QDataStream &stream)
 {
-    for (uint16_t i = 0; i < coffHeader_.numberOfSections; ++i) {
+    for (uint16_t i = 0; i < coffHeader_.numberOfSections; ++i)
+    {
         SectionHeader header;
         header.name[8] = '\0';
-        if (stream.readRawData(header.name, 8) != 8) {
+        if (stream.readRawData(header.name, 8) != 8)
+        {
             Log::error("Invalid PE file: stream ended");
             return false;
         }
@@ -228,7 +260,8 @@ bool CoffFile::parseSectionTable(QDataStream &stream)
         sectionTable_.push_back(header);
     }
 
-    if (stream.atEnd()) {
+    if (stream.atEnd())
+    {
         Log::error("Invalid PE file: stream ended");
         return false;
     }
@@ -238,13 +271,15 @@ bool CoffFile::parseSectionTable(QDataStream &stream)
 
 bool CoffFile::parseSections(QDataStream &stream)
 {
-    for (const SectionHeader &header : sectionTable_) {
+    for (const SectionHeader &header : sectionTable_)
+    {
         PESectionPtr section = std::make_shared<PESection>(header);
 
         std::vector<char> data(header.sizeOfRawData);
         device_->seek(header.pointerToRawData);
         if (stream.readRawData(data.data(), header.sizeOfRawData) !=
-                header.sizeOfRawData) {
+            header.sizeOfRawData)
+        {
             Log::error("Invalid PE file: stream ended reading section data");
             return false;
         }
@@ -259,7 +294,8 @@ bool CoffFile::parseSections(QDataStream &stream)
 
 const QString CoffFile::machineString(CoffFile::MachineType type)
 {
-    switch (type) {
+    switch (type)
+    {
     case MACH_UNKNOWN:
         return "Unknown";
     case MACH_AM33:
@@ -315,7 +351,8 @@ const QString CoffFile::machineString(CoffFile::MachineType type)
     }
 }
 
-struct CCharString {
+struct CCharString
+{
     CoffFile::CoffCharacteristics characteristic;
     const char *string;
 };
@@ -345,9 +382,12 @@ CoffFile::coffCharString(CoffFile::CoffCharacteristics characteristics)
 {
     QString string;
 
-    for (int i = 0; i < COFF_CHAR_STRINGS_COUNT; ++i) {
-        if (characteristics & coffCharStrings[i].characteristic) {
-            if (!string.isEmpty()) {
+    for (int i = 0; i < COFF_CHAR_STRINGS_COUNT; ++i)
+    {
+        if (characteristics & coffCharStrings[i].characteristic)
+        {
+            if (!string.isEmpty())
+            {
                 string += " | ";
             }
             string += coffCharStrings[i].string;
@@ -359,7 +399,8 @@ CoffFile::coffCharString(CoffFile::CoffCharacteristics characteristics)
 
 const QString CoffFile::subsystemString(CoffFile::Subsystem subsystem)
 {
-    switch (subsystem) {
+    switch (subsystem)
+    {
     case SUBSYS_UNKNOWN:
         return "Unknown";
     case SUBSYS_NATIVE:
@@ -393,7 +434,8 @@ const QString CoffFile::subsystemString(CoffFile::Subsystem subsystem)
     }
 }
 
-struct DCharString {
+struct DCharString
+{
     CoffFile::DllCharacteristics characteristic;
     const char *string;
 };
@@ -419,9 +461,12 @@ CoffFile::dllCharString(CoffFile::DllCharacteristics characteristics)
 {
     QString string;
 
-    for (int i = 0; i < DLL_CHAR_STRINGS_COUNT; ++i) {
-        if (characteristics & dllCharStrings[i].characteristic) {
-            if (!string.isEmpty()) {
+    for (int i = 0; i < DLL_CHAR_STRINGS_COUNT; ++i)
+    {
+        if (characteristics & dllCharStrings[i].characteristic)
+        {
+            if (!string.isEmpty())
+            {
                 string += " | ";
             }
             string += dllCharStrings[i].string;
@@ -431,7 +476,8 @@ CoffFile::dllCharString(CoffFile::DllCharacteristics characteristics)
     return string;
 }
 
-struct SCharString {
+struct SCharString
+{
     CoffFile::SectionCharacteristics characteristic;
     const char *string;
 };
@@ -480,9 +526,12 @@ CoffFile::sectionCharString(CoffFile::SectionCharacteristics characteristics)
 {
     QString string;
 
-    for (int i = 0; i < SECTION_CHAR_STRINGS_COUNT; ++i) {
-        if (characteristics & sectionCharStrings[i].characteristic) {
-            if (!string.isEmpty()) {
+    for (int i = 0; i < SECTION_CHAR_STRINGS_COUNT; ++i)
+    {
+        if (characteristics & sectionCharStrings[i].characteristic)
+        {
+            if (!string.isEmpty())
+            {
                 string += " | ";
             }
             string += sectionCharStrings[i].string;
@@ -491,4 +540,3 @@ CoffFile::sectionCharString(CoffFile::SectionCharacteristics characteristics)
 
     return string;
 }
-

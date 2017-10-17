@@ -4,13 +4,14 @@
 #include "ui/mainwindow.h"
 #include <QApplication>
 
-class ISA : public QApplication {
-  Q_OBJECT
+class ISA : public QApplication
+{
+    Q_OBJECT
 public:
-  ISA(int &argc, char *argv[]);
+    ISA(int &argc, char *argv[]);
 
 private:
-  MainWindow mainWindow_;
+    MainWindow mainWindow_;
 };
 
 #endif // ISA_H

@@ -11,7 +11,7 @@ class CoffFile
 public:
     CoffFile();
 
-    bool parse ( QIODevice *device );
+    bool parse(QIODevice *device);
 
     inline bool valid()
     {
@@ -23,13 +23,14 @@ protected:
     bool valid_;
 
 private:
-    bool parseCoffHeader ( QDataStream &stream );
-    bool parseOptionalHeader ( QDataStream &stream );
-    bool parseSectionTable ( QDataStream &stream );
-    bool parseSections ( QDataStream &stream );
+    bool parseCoffHeader(QDataStream &stream);
+    bool parseOptionalHeader(QDataStream &stream);
+    bool parseSectionTable(QDataStream &stream);
+    bool parseSections(QDataStream &stream);
 
 public:
-    struct CoffHeader {
+    struct CoffHeader
+    {
         uint16_t machine;
         uint16_t numberOfSections;
         uint32_t timeDateStamp;
@@ -39,7 +40,8 @@ public:
         uint16_t characteristics;
     };
 
-    struct OptionalHeader {
+    struct OptionalHeader
+    {
         uint16_t signature;
         uint8_t majorLinkerVersion;
         uint8_t minorLinkerVersion;
@@ -52,7 +54,8 @@ public:
         // PE32 only
         uint32_t baseOfData;
 
-        // The next 21 fields are an extension to the COFF optional header format
+        // The next 21 fields are an extension to the COFF optional header
+        // format
         quint64 imageBase; // 32 bit for PE32, 64 for PE32+
         uint32_t sectionAlignment;
         uint32_t fileAlignment;
@@ -76,12 +79,14 @@ public:
         uint32_t numberOfRvaAndSizes;
     };
 
-    struct DataDirectory {
+    struct DataDirectory
+    {
         uint32_t virtualAddress;
         uint32_t size;
     };
 
-    struct SectionHeader {
+    struct SectionHeader
+    {
         char name[9]; // 8 max chars plus null-terminator
         uint32_t virtualSize;
         uint32_t virtualAddress;
@@ -94,7 +99,8 @@ public:
         uint32_t characteristics;
     };
 
-    enum MachineType {
+    enum MachineType
+    {
         MACH_UNKNOWN = 0x0,
         MACH_AM33 = 0x1d3,
         MACH_AMD64 = 0x8664,
@@ -122,14 +128,15 @@ public:
         MACH_WCEMIPSV2 = 0x169,
     };
 
-    enum CoffCharacteristics {
+    enum CoffCharacteristics
+    {
         CCHAR_RELOCS_STRIPPED = 0x0001,
         CCHAR_EXECUTABLE_IMAGE = 0x0002,
         CCHAR_LINE_NUMS_STRIPPED = 0x0004,  // deprecated
         CCHAR_LOCAL_SYMS_STRIPPED = 0x0008, // deprecated
         CCHAR_AGRESSIVE_WS_TRIM = 0x0010,
         CCHAR_LARGE_ADDRESS_AWARE =
-            0x0020,                       // Application can handle > 2-GB addresses
+            0x0020, // Application can handle > 2-GB addresses
         CCHAR_BYTES_RESERVED_LO = 0x0080, // deprecated
         CCHAR_MACHINE_32BIT = 0x0100,
         CCHAR_DEBUG_STRIPPED = 0x0200,
@@ -142,7 +149,8 @@ public:
         CCHAR_BYTES_RESERVED_HI = 0x8000, // deprecated
     };
 
-    enum Subsystem {
+    enum Subsystem
+    {
         SUBSYS_UNKNOWN = 0,
         SUBSYS_NATIVE = 1,
         SUBSYS_WINDOWS_GUI = 2,
@@ -159,7 +167,8 @@ public:
         SUBSYS_WINDOWS_BOOT_APPLICATION = 16,
     };
 
-    enum DllCharacteristics {
+    enum DllCharacteristics
+    {
         DCHAR_HIGHENTROPY_VA = 0x0020,
         DCHAR_DYNAMIC_BASE = 0x0040,
         DCHAR_FORCE_INTEGRITY = 0x0080,
@@ -173,13 +182,15 @@ public:
         DCHAR_TERMINAL_SERVER_AWARE = 0x8000,
     };
 
-    enum ExeType {
+    enum ExeType
+    {
         ET_PE32 = 0x10b,
         ET_PE32P = 0x20b,
         ET_ROM = 0x107,
     };
 
-    enum SectionCharacteristics {
+    enum SectionCharacteristics
+    {
         SCHAR_TYPE_NO_PAD = 0x8,
         SCHAR_CNT_CODE = 0x20,
         SCHAR_CNT_INITIALIZED_DATA = 0x40,
@@ -224,12 +235,12 @@ public:
     std::vector<SectionHeader> sectionTable_;
     std::vector<SectionPtr> sections_;
 
-    static const QString machineString ( MachineType type );
-    static const QString coffCharString ( CoffCharacteristics characteristics );
-    static const QString subsystemString ( Subsystem subsystem );
-    static const QString dllCharString ( DllCharacteristics characteristics );
+    static const QString machineString(MachineType type);
+    static const QString coffCharString(CoffCharacteristics characteristics);
+    static const QString subsystemString(Subsystem subsystem);
+    static const QString dllCharString(DllCharacteristics characteristics);
     static const QString
-    sectionCharString ( SectionCharacteristics characteristics );
+    sectionCharString(SectionCharacteristics characteristics);
 };
 
 typedef std::shared_ptr<CoffFile> CoffFilePtr;

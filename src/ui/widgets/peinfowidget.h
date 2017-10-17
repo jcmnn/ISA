@@ -4,34 +4,36 @@
 #include "pe/pefile.h"
 #include <QWidget>
 
-namespace Ui {
+namespace Ui
+{
 class PEInfoWidget;
 }
 
-class PEInfoWidget : public QWidget {
-  Q_OBJECT
+class PEInfoWidget : public QWidget
+{
+    Q_OBJECT
 
 public:
-  explicit PEInfoWidget(QWidget *parent = 0);
-  ~PEInfoWidget();
+    explicit PEInfoWidget(QWidget *parent = 0);
+    ~PEInfoWidget();
 
 public slots:
-  void updateFile(PEFilePtr file);
+    void updateFile(PEFilePtr file);
 
-  // Resize the coff table to fit elements
-  void resizeCoff();
+    // Resize the coff table to fit elements
+    void resizeCoff();
 
-  // resize the optional table to fit elements
-  void resizeOptional();
+    // resize the optional table to fit elements
+    void resizeOptional();
 
-  // size the section table to fit elements
-  void resizeSection();
+    // size the section table to fit elements
+    void resizeSection();
 
 private:
-  Ui::PEInfoWidget *ui_;
-  PECoffModel coffModel_;
-  PEOptionalModel optionalModel_;
-  PESectionModel sectionModel_;
+    Ui::PEInfoWidget *ui_;
+    PECoffModel coffModel_;
+    PEOptionalModel optionalModel_;
+    PESectionModel sectionModel_;
 };
 
 #endif // PEINFOWIDGET_H
