@@ -272,12 +272,12 @@
   <customwidget>
    <class>LogView</class>
    <extends>QPlainTextEdit</extends>
-   <header>widgets/logview.h</header>
+   <header>ui/widgets/logview.h</header>
   </customwidget>
   <customwidget>
    <class>PEInfoWidget</class>
    <extends>QWidget</extends>
-   <header>widgets/peinfowidget.h</header>
+   <header>ui/widgets/peinfowidget.h</header>
    <container>1</container>
   </customwidget>
  </customwidgets>

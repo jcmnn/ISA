@@ -3,33 +3,35 @@ cmake_minimum_required(VERSION 3.1)
 project(ISA)
 
 set(I_SOURCE
-	main.cpp
+    main.cpp
 
-        isa.h
-        isa.cpp
-        logmodel.h
-        logmodel.cpp
-        log.h
-        log.cpp
-        sectionhandler.h
-        sectionhandler.cpp
+    isa.h
+    isa.cpp
+    logmodel.h
+    logmodel.cpp
+    log.h
+    log.cpp
+    sectionhandler.h
+    sectionhandler.cpp
 
-        section.h
-        section.cpp
+    section.h
+    section.cpp
 
-        ui/mainwindow.h
-        ui/mainwindow.cpp
+    ui/mainwindow.h
+    ui/mainwindow.cpp
 
-        ui/widgets/logview.h
-        ui/widgets/logview.cpp
+    ui/widgets/logview.h
+    ui/widgets/logview.cpp
 
-        ui/widgets/peinfowidget.h
-        ui/widgets/peinfowidget.cpp
+    ui/widgets/peinfowidget.h
+    ui/widgets/peinfowidget.cpp
 
-        pe/pefile.h
-        pe/pefile.cpp
-        pe/pesection.h
-        pe/pesection.cpp
+    pe/pefile.h
+    pe/pefile.cpp
+    pe/pesection.h
+    pe/pesection.cpp
+    pe/cofffile.cpp
+    pe/cofffile.h
 )
 
 set(I_UIS

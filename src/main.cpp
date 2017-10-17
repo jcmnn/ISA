@@ -1,8 +1,7 @@
 #include <isa.h>
 
-int main(int argc, char *argv[])
-{
-    ISA isa(argc, argv);
+int main(int argc, char *argv[]) {
+  ISA isa(argc, argv);
 
-    return isa.exec();
+  return isa.exec();
 }

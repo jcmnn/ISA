@@ -1,13 +1,9 @@
 #include "sectionhandler.h"
-#include <vector>
 #include "section.h"
+#include <vector>
 
-SectionHandler::SectionHandler()
-{
+SectionHandler::SectionHandler() {}
 
-}
-
-void SectionHandler::addSection(SectionPtr section)
-{
-    sections_.push_back(section);
+void SectionHandler::addSection(SectionPtr section) {
+  sections_.push_back(section);
 }

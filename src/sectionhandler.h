@@ -3,16 +3,14 @@
 #include "section.h"
 #include <vector>
 
-class SectionHandler
-{
+class SectionHandler {
 public:
-    SectionHandler();
+  SectionHandler();
 
-    void addSection(SectionPtr section);
-
+  void addSection(SectionPtr section);
 
 private:
-    std::vector<SectionPtr> sections_;
+  std::vector<SectionPtr> sections_;
 };
 
 #endif // SECTIONHANDLER_H
