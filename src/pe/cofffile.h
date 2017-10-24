@@ -17,6 +17,11 @@ public:
     {
         return valid_;
     }
+    
+    inline std::vector<SectionPtr> &sections()
+    {
+        return sections_;
+    }
 
 protected:
     QIODevice *device_;

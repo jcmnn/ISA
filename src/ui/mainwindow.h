@@ -3,6 +3,7 @@
 
 #include <QFileDialog>
 #include <QMainWindow>
+#include "pe/cofffile.h"
 
 namespace Ui
 {
@@ -16,6 +17,13 @@ class MainWindow : public QMainWindow
 public:
     explicit MainWindow(QWidget *parent = 0);
     ~MainWindow();
+    
+    /* Resets the state of the window to get ready to
+     * load a new project */
+    void reset();
+    
+    /* Updates the PE Info tab */
+    void updatePEInfo(CoffFilePtr cofffile);
 
 private:
     Ui::MainWindow *ui_;

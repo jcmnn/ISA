@@ -1,3 +1,6 @@
 [submodule "lib/capstone"]
 	path = lib/capstone
 	url = https://github.com/aquynh/capstone.git
+[submodule "lib/zydis"]
+	path = lib/zydis
+	url = https://github.com/zyantific/zydis.git

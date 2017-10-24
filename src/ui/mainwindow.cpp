@@ -5,6 +5,7 @@
 #include "ui_mainwindow.h"
 
 #include <QStringListModel>
+#include <isa.h>
 
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent), ui_(new Ui::MainWindow)
@@ -39,9 +40,21 @@ void MainWindow::on_actionNew_triggered()
 
         PEFilePtr pefile = std::make_shared<PEFile>();
 
-        if (!pefile->parse(&file))
+        if (pefile->parse(&file))
         {
-            ui_->peInfo->updateFile(pefile);
+            ISA::get()->projectHandler()->open(pefile);
         }
     }
+}
+
+
+void MainWindow::reset()
+{
+    ui_->peInfo->updateFile(nullptr);
+}
+
+
+void MainWindow::updatePEInfo(CoffFilePtr cofffile)
+{
+    ui_->peInfo->updateFile(cofffile);
 }

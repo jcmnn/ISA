@@ -12,6 +12,6 @@ find_package(Qt5Widgets REQUIRED)
 find_package(Threads REQUIRED)
 
 add_subdirectory(lib/capstone)
+add_subdirectory(lib/zydis)
 
-include_directories(lib/capstone/include)
 add_subdirectory(src)

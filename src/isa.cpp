@@ -2,8 +2,11 @@
 #include "log.h"
 #include <QFile>
 
-ISA::ISA(int &argc, char *argv[]) : QApplication(argc, argv)
+ISA *g_isa = nullptr;
+
+ISA::ISA(int &argc, char *argv[]) : QApplication(argc, argv), disassembler_(&sectionHandler_)
 {
+    g_isa = this;
     QFile darkSheet(":/style/dark.qss");
     if (!darkSheet.open(QFile::ReadOnly))
     {
@@ -18,4 +21,11 @@ ISA::ISA(int &argc, char *argv[]) : QApplication(argc, argv)
     mainWindow_.show();
 
     Log::normal("Loaded ISA");
+}
+
+
+
+ISA *ISA::get()
+{
+    return g_isa;
 }

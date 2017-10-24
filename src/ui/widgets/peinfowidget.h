@@ -18,7 +18,7 @@ public:
     ~PEInfoWidget();
 
 public slots:
-    void updateFile(PEFilePtr file);
+    void updateFile(CoffFilePtr file);
 
     // Resize the coff table to fit elements
     void resizeCoff();

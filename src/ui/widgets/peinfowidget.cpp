@@ -32,7 +32,7 @@ PEInfoWidget::~PEInfoWidget()
     delete ui_;
 }
 
-void PEInfoWidget::updateFile(PEFilePtr file)
+void PEInfoWidget::updateFile(CoffFilePtr file)
 {
     coffModel_.setFile(file);
     optionalModel_.setFile(file);
